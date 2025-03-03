@@ -6,28 +6,22 @@ import lombok.*;
 @Entity
 @Table(name = "user")
 @Getter
-@ToString(exclude = "pwd")
 @NoArgsConstructor
 public class User {
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private String id;
 
     @Column(name = "email", unique = true)
     private String email;
-
-    @Column(name = "password")
-    private String pwd;
 
     @Column(name = "name")
     private String name;
 
     @Builder
-    public User(int id, String email, String pwd, String name){
+    public User(String id, String email, String name){
         this.id = id;
         this.email = email;
-        this.pwd = pwd;
         this.name = name;
     }
 }
