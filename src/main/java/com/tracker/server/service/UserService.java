@@ -5,7 +5,6 @@ import com.tracker.server.dto.UserDto;
 import com.tracker.server.entity.User;
 import com.tracker.server.repository.UserRepository;
 import org.springframework.stereotype.Service;
-import lombok.RequiredArgsConstructor;
 
 @Service
 public class UserService {
@@ -20,11 +19,7 @@ public class UserService {
 
         String id = userDto.getId();
 
-        User user = User.builder()
-                .id(id)
-                .name(userDto.getName())
-                .email(userDto.getEmail())
-                .build();
+        User user = new User(id, userDto.getEmail(), userDto.getName());
 
         return userRepository.save(user);
     }
