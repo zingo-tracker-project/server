@@ -1,12 +1,15 @@
-package com.tracker.server.entity;
+package com.tracker.server.entity.user;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 @Entity
-@Table(name = "user")
-@Getter
-@NoArgsConstructor
+@Table(name = "TB_USER")
+@Data
+@NoArgsConstructor // jpa가 내부적으로 사용하기위한 생성자
+@AllArgsConstructor
+@Builder
 public class User {
     @Id
     @Column(name = "id")
@@ -18,10 +21,4 @@ public class User {
     @Column(name = "name")
     private String name;
 
-    @Builder
-    public User(String id, String email, String name){
-        this.id = id;
-        this.email = email;
-        this.name = name;
-    }
 }

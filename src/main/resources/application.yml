@@ -43,10 +43,12 @@ spring:
     hikari:
       maximum-pool-size: 10
   jpa:
-    show-sql: true
+    hibernate:
+      ddl-auto: create
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:
       hibernate:
-        ddl-auto: create
         format_sql: true
         show_sql: true
         highlight_sql: true
@@ -76,9 +78,12 @@ spring:
       maximum-pool-size: 10
   jpa:
     show-sql: true
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:
       hibernate:
-        ddl-auto: update
         format_sql: true
         show_sql: true
         highlight_sql: true
