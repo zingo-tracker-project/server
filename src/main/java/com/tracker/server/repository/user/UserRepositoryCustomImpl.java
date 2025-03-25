@@ -5,22 +5,23 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.tracker.server.entity.user.QUser;
 import com.tracker.server.entity.user.User;
 import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
 public class UserRepositoryCustomImpl implements UserRepositoryCustom {
 
-    private final JPAQueryFactory queryFactory;
-    private final EntityManager entityManager;
-
-    QUser user = QUser.user;
+    private final JPAQueryFactory queryFactory; // query-dsl
+    private final EntityManager entityManager; // jpa
+    QUser user = QUser.user; // query dsl
 
     @Override
-    public User createUser(User user) {
+    @Transactional
+    public User createUserCustom(User user) {
         entityManager.persist(user);
         return user;
     }

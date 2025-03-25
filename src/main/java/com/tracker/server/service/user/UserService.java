@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
-
     private final UserRepository userRepository;
 
     public UserService(UserRepository userRepository) {
@@ -17,13 +16,14 @@ public class UserService {
     }
 
     public UserResDTO createUser(UserReqDTO userReqDto) {
+
         User user = User.builder()
-                .id(userReqDto.getId())
+                .id(userReqDto.getId()) // TODO ID값 양방향 임호화
                 .email(userReqDto.getEmail())
                 .name(userReqDto.getName())
                 .build();
 
-        User createdUser = userRepository.save(user);
+        User createdUser = userRepository.createUserCustom(user);
 
         UserResDTO userResDTO = UserResDTO.builder()
                 .id(createdUser.getId())
