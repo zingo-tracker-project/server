@@ -10,10 +10,9 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 
 @RestController
@@ -33,8 +32,34 @@ public class UserController {
     }
 
     // TODO 회원 정보 수정
+    @PatchMapping("/{id}")
+    public ApiResponseEntity<UserResDTO> updateUser(@PathVariable String id, @RequestBody Map<String, Object> updates) {
+        UserResDTO user = userService.findUserById(id);
+
+        if (updates.containsKey("email")) {
+            user.setEmail((String) updates.get("email"));
+        }
+        if (updates.containsKey("name")) {
+            user.setName((String) updates.get("name"));
+        }
+
+        UserResDTO savedUser = userService.updateUserById(user);
+
+        return ApiResponseEntity.ok(CommonConstants.GLOBAL_SUCCESS_MSG,savedUser);
+    }
 
     // TODO 회원 정보 삭제
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable String id) {
+        userService.deleteUserById(id);;
+        return ResponseEntity.noContent().build();  // 204 No Content 응답
+    }
 
     // TODO 회원 정보 가져오기
+    @GetMapping("/{id}")
+    public ApiResponseEntity<UserResDTO> getUser(@PathVariable String id) {
+        UserResDTO user = userService.findUserById(id);
+        return ApiResponseEntity.ok(CommonConstants.GLOBAL_SUCCESS_MSG,user);
+    }
+
 }

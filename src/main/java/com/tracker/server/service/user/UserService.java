@@ -1,6 +1,7 @@
 package com.tracker.server.service.user;
 
 
+import ch.qos.logback.classic.Logger;
 import com.tracker.server.dto.user.req.UserReqDTO;
 import com.tracker.server.dto.user.res.UserResDTO;
 import com.tracker.server.entity.user.User;
@@ -34,16 +35,52 @@ public class UserService {
         return userResDTO;
     }
 
-    public User findUserById(String id) {
+    public UserResDTO findUserById(String id) {
+
         User user = userRepository.findUserById(id);
+
         // TODO Custom Exception 구현 필요
         if (user == null) {
             throw new IllegalArgumentException("사용자를 찾을 수 없습니다. ID: " + id);
         }
-        return user;
+
+        UserResDTO userResDTO = UserResDTO.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .name(user.getName()).
+                build();
+
+        return userResDTO;
+    }
+
+    public UserResDTO updateUserById(UserResDTO userResDTO) {
+
+        User user = User.builder()
+                .id(userResDTO.getId())
+                .email(userResDTO.getEmail())
+                .name(userResDTO.getName())
+                .build();
+
+        User updatedUser = userRepository.save(user);
+
+            UserResDTO updatedDTO = UserResDTO.builder()
+                .id(updatedUser.getId())
+                .email(updatedUser.getEmail())
+                .name(updatedUser.getName()).
+                build();
+
+        return updatedDTO;
     }
 
     public void deleteUserById(String id) {
-        userRepository.deleteUserById(id);
+
+        User user = userRepository.findUserById(id);
+
+        // TODO Custom Exception 구현 필요
+        if (user == null) {
+            throw new IllegalArgumentException("사용자를 찾을 수 없습니다. ID: " + id);
+        }
+
+        userRepository.deleteById(id);;
     }
 }
