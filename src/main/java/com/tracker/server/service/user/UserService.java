@@ -5,30 +5,46 @@ import com.tracker.server.dto.user.req.UserReqDTO;
 import com.tracker.server.dto.user.res.UserResDTO;
 import com.tracker.server.entity.user.User;
 import com.tracker.server.repository.user.UserRepository;
+import com.tracker.server.utils.AESUtil;
+import com.tracker.server.utils.JwtResDTO;
+import com.tracker.server.utils.JwtUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class UserService {
     private final UserRepository userRepository;
+    private final JwtUtil jwtUtil;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, JwtUtil jwtUtil) {
         this.userRepository = userRepository;
+        this.jwtUtil = jwtUtil;
     }
 
     public UserResDTO createUser(UserReqDTO userReqDto) {
 
+        String encryptedId = AESUtil.encryptForJwt(userReqDto.getUserId());
+
+        log.info("encryptedId :" +  encryptedId);
+
         User user = User.builder()
-                .id(userReqDto.getId()) // TODO ID값 양방향 임호화
+                .userId(encryptedId)
                 .email(userReqDto.getEmail())
                 .name(userReqDto.getName())
                 .build();
 
         User createdUser = userRepository.createUserCustom(user);
 
+        log.info("getUserId : "+createdUser.getUserId());
+
+        JwtResDTO jwt = jwtUtil.generateJwtToken(createdUser.getUserId());
+
         UserResDTO userResDTO = UserResDTO.builder()
-                .id(createdUser.getId())
+                .userId(createdUser.getUserId())
                 .email(createdUser.getEmail())
-                .name(createdUser.getName()).
+                .name(createdUser.getName())
+                .jwt(jwt).
                 build();
 
         return userResDTO;

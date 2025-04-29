@@ -27,16 +27,16 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
     }
 
     @Override
-    public User findUserById(String id) {
+    public User findUserById(String userId) {
         return queryFactory
                 .selectFrom(user)
-                .where(user.id.eq(id))
+                .where(user.userId.eq(userId))
                 .fetchOne();
     }
     @Override
-    public void deleteUserById(String id) {
+    public void deleteUserById(String userId) {
         queryFactory.delete(user)
-                .where(user.id.eq(id))
+                .where(user.userId.eq(userId))
                 .execute();
     }
 

@@ -22,6 +22,11 @@ logging:
   level:
     root: debug
 
+jwt:
+  secret-key: tdfhrsfcretKey20223467tdsfaadsfsfgsfdhdfhSecrsdfgfdshsKey20230327testSedfgsetKey20234627
+  access-token-expiration: 3600000        # 1시간 (3600초)
+  refresh-token-expiration: 1209600000     # 14일 (밀리초)
+
 server:
   # 서버 port 설정
   port: 8080
