@@ -1,7 +1,7 @@
 package com.tracker.server.config;
 
-import com.tracker.server.utils.ApiResponse;
 import com.tracker.server.utils.CommonConstants;
+import com.tracker.server.utils.CustomException;
 import com.tracker.server.utils.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,4 +52,17 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
     }
+
+    // 커스컴 에러 처리
+    @ExceptionHandler(CustomException.class)
+    public ResponseEntity<ErrorResponse> handleCustomException(CustomException ex) {
+        ErrorResponse error = ErrorResponse.builder()
+                .status(ex.getStatus())
+                .message(ex.getMessage())
+                .errors(null)
+                .build();
+
+        return ResponseEntity.status(ex.getStatus()).body(error);
+    }
 }
+
