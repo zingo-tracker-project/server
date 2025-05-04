@@ -31,7 +31,7 @@ public class AESUtil {
             cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivParameterSpec);
             byte[] encrypted = cipher.doFinal(strToEncrypt.getBytes(StandardCharsets.UTF_8));
 
-            // 📌 IV + 암호문 합치기
+            // IV + 암호문 합치기
             byte[] result = new byte[iv.length + encrypted.length];
             System.arraycopy(iv, 0, result, 0, iv.length);
             System.arraycopy(encrypted, 0, result, iv.length, encrypted.length);

@@ -5,9 +5,7 @@ import com.tracker.server.dto.user.req.UserReqDTO;
 import com.tracker.server.dto.user.res.UserResDTO;
 import com.tracker.server.entity.user.User;
 import com.tracker.server.repository.user.UserRepository;
-import com.tracker.server.utils.AESUtil;
-import com.tracker.server.utils.JwtResDTO;
-import com.tracker.server.utils.JwtUtil;
+import com.tracker.server.utils.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -24,9 +22,7 @@ public class UserService {
 
     public UserResDTO createUser(UserReqDTO userReqDto) {
 
-        String encryptedId = AESUtil.encryptForJwt(userReqDto.getUserId());
-
-        log.info("encryptedId :" +  encryptedId);
+        String encryptedId = HashIdsUtil.encode(userReqDto.getUserId());
 
         User user = User.builder()
                 .userId(encryptedId)
@@ -35,9 +31,6 @@ public class UserService {
                 .build();
 
         User createdUser = userRepository.createUserCustom(user);
-
-        log.info("getUserId : "+createdUser.getUserId());
-
         JwtResDTO jwt = jwtUtil.generateJwtToken(createdUser.getUserId());
 
         UserResDTO userResDTO = UserResDTO.builder()
