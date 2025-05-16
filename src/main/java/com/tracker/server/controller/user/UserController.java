@@ -6,6 +6,8 @@ import com.tracker.server.entity.user.User;
 import com.tracker.server.service.user.UserService;
 import com.tracker.server.utils.ApiResponseEntity;
 import com.tracker.server.utils.CommonConstants;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user") // User API
+@Tag(name = "User API", description = "사용자 API")
 public class UserController {
     private final UserService userService;
 
@@ -23,8 +26,8 @@ public class UserController {
         this.userService = userService;
     }
 
-    // TODO Filter를 이용한 로깅 및 보안처리 필요
     @PostMapping("")
+    @Operation(summary = "회원가입", description = "회원가입 API")
     public ApiResponseEntity<UserResDTO> createUser(@RequestBody @Valid UserReqDTO userReqDto) {
         UserResDTO savedUser = userService.createUser(userReqDto);
         return ApiResponseEntity.ok(CommonConstants.GLOBAL_SUCCESS_MSG,savedUser);
