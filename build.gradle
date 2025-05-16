@@ -56,7 +56,7 @@ dependencies {
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5' // jackson 기반 파서 사용
 
     implementation 'org.hashids:hashids:1.0.3'
-
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
 }
 
 tasks.named('test') {
