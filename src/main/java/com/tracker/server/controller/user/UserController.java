@@ -26,7 +26,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("")
+    @PostMapping("/join")
     @Operation(summary = "회원가입", description = "회원가입 API")
     public ApiResponseEntity<UserResDTO> createUser(@RequestBody @Valid UserReqDTO userReqDto) {
         UserResDTO savedUser = userService.createUser(userReqDto);
