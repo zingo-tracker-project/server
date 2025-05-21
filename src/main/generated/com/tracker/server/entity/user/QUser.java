@@ -19,11 +19,19 @@ public class QUser extends EntityPathBase<User> {
 
     public static final QUser user = new QUser("user");
 
-    public final StringPath email = createString("email");
+    public final StringPath ageGrp = createString("ageGrp");
 
-    public final StringPath name = createString("name");
+    public final DateTimePath<java.time.LocalDateTime> createdAt = createDateTime("createdAt", java.time.LocalDateTime.class);
+
+    public final DateTimePath<java.time.LocalDateTime> deletedAt = createDateTime("deletedAt", java.time.LocalDateTime.class);
+
+    public final EnumPath<com.tracker.server.utils.enums.Gender> gender = createEnum("gender", com.tracker.server.utils.enums.Gender.class);
+
+    public final BooleanPath isActive = createBoolean("isActive");
 
     public final StringPath userId = createString("userId");
+
+    public final StringPath userNm = createString("userNm");
 
     public QUser(String variable) {
         super(User.class, forVariable(variable));

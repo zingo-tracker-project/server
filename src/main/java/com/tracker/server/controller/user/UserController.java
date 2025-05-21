@@ -1,18 +1,15 @@
 package com.tracker.server.controller.user;
 
-import com.tracker.server.dto.user.req.UserReqDTO;
-import com.tracker.server.dto.user.res.UserResDTO;
-import com.tracker.server.entity.user.User;
+import com.tracker.server.dto.user.req.UserLoginReqDTO;
+import com.tracker.server.dto.user.res.UserLoginResDTO;
 import com.tracker.server.service.user.UserService;
 import com.tracker.server.utils.ApiResponseEntity;
 import com.tracker.server.utils.CommonConstants;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -26,10 +23,10 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/join")
-    @Operation(summary = "회원가입", description = "회원가입 API")
-    public ApiResponseEntity<UserResDTO> createUser(@RequestBody @Valid UserReqDTO userReqDto) {
-        UserResDTO savedUser = userService.createUser(userReqDto);
+    @PostMapping("/login")
+    @Operation(summary = "로그인", description = "로그인 API")
+    public ApiResponseEntity<UserLoginResDTO> loginUser(@RequestBody @Valid UserLoginReqDTO userLoginReqDto) {
+        UserLoginResDTO savedUser = userService.loginUser(userLoginReqDto);
         return ApiResponseEntity.ok(CommonConstants.GLOBAL_SUCCESS_MSG,savedUser);
     }
 
@@ -39,9 +36,4 @@ public class UserController {
         return ResponseEntity.ok("id :  " + userId);
     }
 
-    // TODO 회원 정보 수정
-
-    // TODO 회원 정보 삭제
-
-    // TODO 회원 정보 가져오기
 }
