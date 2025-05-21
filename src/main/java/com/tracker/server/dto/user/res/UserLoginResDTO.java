@@ -1,6 +1,8 @@
 package com.tracker.server.dto.user.res;
 
 import com.tracker.server.utils.JwtResDTO;
+import com.tracker.server.utils.enums.Gender;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,9 +12,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserResDTO {
+public class UserLoginResDTO {
     private String userId;
-    private String name;
-    private String email;
+    private String userNm;
+    private Gender gender;
+    private String age_grp;
     private JwtResDTO jwt;
 }

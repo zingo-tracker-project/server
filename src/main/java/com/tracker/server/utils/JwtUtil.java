@@ -1,9 +1,8 @@
 package com.tracker.server.utils;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +11,7 @@ import java.util.Base64;
 import java.util.Date;
 
 @Component
+@Slf4j
 public class JwtUtil {
 
     @Value("${jwt.secret-key}")
@@ -23,7 +23,7 @@ public class JwtUtil {
     @Value("${jwt.refresh-token-expiration}")
     private int REFRESH_TOKEN_EXPIRATION; // milliseconds (ex: 1209600000 = 14일)
 
-    // 📌 Access Token 생성
+    // Access Token 생성
     public String generateAccessToken(String userId) {
         return generateToken(userId, ACCESS_TOKEN_EXPIRATION);
     }
@@ -48,9 +48,14 @@ public class JwtUtil {
 
     public boolean validateToken(String token) {
         try {
-            parseClaims(token);
-            return true;
-        } catch (Exception e) {
+            Claims claims = parseClaims(token);
+            Date expiration = claims.getExpiration();
+            return expiration.after(new Date());
+        } catch (ExpiredJwtException e) {
+            log.debug("토큰 만료됨");
+            return false;
+        } catch (JwtException | IllegalArgumentException e) {
+            log.debug("토큰 유효성 오류: " + e.getMessage());
             return false;
         }
     }
@@ -73,8 +78,9 @@ public class JwtUtil {
 
     // 내부용: Claims 파싱
     private Claims parseClaims(String token) {
-        return Jwts.parser()
-                .setSigningKey(SECRET_KEY)
+        return Jwts.parserBuilder()
+                .setSigningKey(getSigningKey()) // 여기 수정됨
+                .build()
                 .parseClaimsJws(token)
                 .getBody();
     }
