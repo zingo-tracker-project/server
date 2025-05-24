@@ -1,5 +1,9 @@
 package com.tracker.server.entity.task;
 
+import java.time.LocalDateTime;
+
+import org.hibernate.annotations.CreationTimestamp;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,4 +31,20 @@ public class SmallTask {
     )
     private BigTask bigTask;
 
+    @Column(name = "content", nullable = false)
+    private String content;
+
+    @Column(name = "created_dt")
+    @CreationTimestamp
+    private LocalDateTime createdDt;
+
+    @Column(name = "is_done")
+    private Boolean isDone = false;
+
+    @Column(name = "done_dt")
+    private LocalDateTime doneDt;
+
+    @Column(name = "div_sug", nullable = false)
+    private Boolean divSug = false;
+    
 }
