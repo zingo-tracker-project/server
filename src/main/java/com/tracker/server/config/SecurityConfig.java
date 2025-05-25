@@ -36,7 +36,9 @@ public class SecurityConfig {
                                 "/swagger-resources",
                                 "/configuration/ui",
                                 "/configuration/security",
-                                "/webjars/**").permitAll()
+                                "/webjars/**",
+                                "/api/big-task/**"
+                                ).permitAll()
                         .anyRequest().authenticated()
                 )
                 // JWT 인증 필터 추가

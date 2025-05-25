@@ -24,6 +24,16 @@ public class QSmallTask extends EntityPathBase<SmallTask> {
 
     public final QBigTask bigTask;
 
+    public final StringPath content = createString("content");
+
+    public final DateTimePath<java.time.LocalDateTime> createdDt = createDateTime("createdDt", java.time.LocalDateTime.class);
+
+    public final BooleanPath divSug = createBoolean("divSug");
+
+    public final DateTimePath<java.time.LocalDateTime> doneDt = createDateTime("doneDt", java.time.LocalDateTime.class);
+
+    public final BooleanPath isDone = createBoolean("isDone");
+
     public final NumberPath<Long> smallTaskId = createNumber("smallTaskId", Long.class);
 
     public QSmallTask(String variable) {
@@ -44,7 +54,7 @@ public class QSmallTask extends EntityPathBase<SmallTask> {
 
     public QSmallTask(Class<? extends SmallTask> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.bigTask = inits.isInitialized("bigTask") ? new QBigTask(forProperty("bigTask")) : null;
+        this.bigTask = inits.isInitialized("bigTask") ? new QBigTask(forProperty("bigTask"), inits.get("bigTask")) : null;
     }
 
 }
