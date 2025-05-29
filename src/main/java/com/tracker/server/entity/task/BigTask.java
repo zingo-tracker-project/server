@@ -12,6 +12,7 @@ import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.tracker.server.entity.user.User;
 
 @Entity
@@ -31,7 +32,7 @@ public class BigTask {
     @JoinColumn(
             name = "user_id",
             nullable = false,
-            foreignKey = @ForeignKey(name = "fk_bigtask_user")
+            foreignKey = @ForeignKey(name = "fk_big_task_user")
     )
     private User user;
 
@@ -56,6 +57,7 @@ public class BigTask {
 
     @Builder.Default
     @OneToMany(mappedBy = "bigTask", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<SmallTask> smallTaskList = new ArrayList<>();
 
     

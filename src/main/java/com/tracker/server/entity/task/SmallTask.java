@@ -1,8 +1,12 @@
 package com.tracker.server.entity.task;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import org.hibernate.annotations.CreationTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.tracker.server.dto.task.res.BigTaskResDTO;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -29,6 +33,7 @@ public class SmallTask {
             nullable = false,
             foreignKey = @ForeignKey(name = "fk_smalltask_bigtask")
     )
+    @JsonBackReference
     private BigTask bigTask;
 
     @Column(name = "content", nullable = false)
