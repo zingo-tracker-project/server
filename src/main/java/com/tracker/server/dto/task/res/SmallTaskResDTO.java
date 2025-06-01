@@ -4,11 +4,13 @@ import com.tracker.server.entity.task.SmallTask;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Data
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
 public class SmallTaskResDTO {
     private Long smallTaskId;
@@ -17,4 +19,13 @@ public class SmallTaskResDTO {
     private Boolean divSug;
     private LocalDateTime createdDt;
     private LocalDateTime doneDt;
+
+    public SmallTaskResDTO(SmallTask smallTask) {
+        this.smallTaskId = smallTask.getSmallTaskId();
+        this.content = smallTask.getContent();
+        this.isDone = smallTask.getIsDone();
+        this.divSug = smallTask.getDivSug();
+        this.createdDt = smallTask.getCreatedDt();
+        this.doneDt = smallTask.getDoneDt();
+    }
 }

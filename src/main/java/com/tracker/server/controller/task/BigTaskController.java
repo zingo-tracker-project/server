@@ -1,5 +1,6 @@
 package com.tracker.server.controller.task;
 
+import com.tracker.server.dto.task.req.BigTaskReqDTO;
 import com.tracker.server.dto.task.res.BigTaskResDTO;
 import com.tracker.server.entity.task.BigTask;
 import com.tracker.server.entity.task.SmallTask;
@@ -23,8 +24,8 @@ public class BigTaskController {
 
     // 큰 할 일 생성
     @PostMapping("/big-task")
-    public ResponseEntity<BigTask> create(@RequestBody BigTask bigTask) {
-        BigTask created = bigTaskService.create(bigTask);
+    public ResponseEntity<BigTaskResDTO> create(@RequestBody BigTaskReqDTO bigTask) {
+        BigTaskResDTO created = bigTaskService.create(bigTask);
         return ResponseEntity.ok(created);
     }
 
@@ -37,15 +38,15 @@ public class BigTaskController {
 
     // 큰 할 일들 조회(User Id)
     @GetMapping("/big-task/user/{userId}")
-    public ResponseEntity<List<BigTask>> get(@PathVariable String userId) {
-        List<BigTask> bigTasks = bigTaskService.getByUserId(userId);
+    public ResponseEntity<List<BigTaskResDTO>> getByUserId(@PathVariable String userId) {
+        List<BigTaskResDTO> bigTasks = bigTaskService.getByUserId(userId);
         return ResponseEntity.ok(bigTasks);
     }
 
     // 전체 할 일 조회(큰할일들+작은할일들)
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<BigTask>> getAllTasks(@PathVariable String userId) {
-        List<BigTask> tasks = bigTaskService.getAllTasksForUser(userId);
+    public ResponseEntity<List<BigTaskResDTO>> getAllTasks(@PathVariable String userId) {
+        List<BigTaskResDTO> tasks = bigTaskService.getAllTasksForUser(userId);
         return ResponseEntity.ok(tasks);
     } 
 
@@ -58,11 +59,11 @@ public class BigTaskController {
 
     // 큰 할 일 수정
     @PutMapping("/big-task/{id}")
-    public ResponseEntity<BigTask> update(
+    public ResponseEntity<BigTaskResDTO> update(
             @PathVariable Long id,
-            @RequestBody BigTask updateData
+            @RequestBody BigTaskReqDTO updateData
     ) {
-        BigTask updated = bigTaskService.updateBigTask(id, updateData);
+        BigTaskResDTO updated = bigTaskService.updateBigTask(id, updateData);
         return ResponseEntity.ok(updated);
     }
 
@@ -75,16 +76,16 @@ public class BigTaskController {
 
     // 큰 할 일 삭제(User Id)
     @DeleteMapping("/big-task/user/{userId}")
-    public ResponseEntity<Void> delete(@PathVariable String userId) {
+    public ResponseEntity<Void> deleteByUserId(@PathVariable String userId) {
         bigTaskService.deleteByUserId(userId);
         return ResponseEntity.noContent().build();
     }
 
     // 작은 할 일 생성(Big Task Id)
     @PostMapping("/big-task/{id}/small-task")
-    public ResponseEntity<SmallTask> create(@PathVariable Long id, @RequestBody SmallTask smallTask) {
-        BigTask bigTask = bigTaskService.getBigTask(id);
-        smallTask.setBigTask(bigTask);
+    public ResponseEntity<SmallTask> createSmallTask(@PathVariable Long id, @RequestBody SmallTask smallTask) {
+        BigTaskResDTO bigTask = bigTaskService.get(id);
+        smallTask.setBigTask(bigTask.toEntity());
         SmallTask created = bigTaskService.create(smallTask);
         return ResponseEntity.ok(created);
     }

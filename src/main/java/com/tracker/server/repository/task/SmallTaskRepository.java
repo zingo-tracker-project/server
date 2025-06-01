@@ -9,4 +9,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface SmallTaskRepository extends JpaRepository<SmallTask, Long> {
 
     List<SmallTask> findByBigTask_BigTaskId(Long bigTaskId);
+
+    List<SmallTask> findByBigTask_User_UserId(String userId);
+
+   
 }

@@ -38,7 +38,6 @@ public class SecurityConfig {
                                 "/configuration/security",
                                 "/webjars/**",
                                 "/api/task/**",
-                                "/api/smalltask/**",
                                 "/api/user/**"
                                 ).permitAll()
                         .anyRequest().authenticated()

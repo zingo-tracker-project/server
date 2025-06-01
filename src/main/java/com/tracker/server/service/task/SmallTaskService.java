@@ -1,5 +1,7 @@
 package com.tracker.server.service.task;
 
+import com.tracker.server.dto.task.req.SmallTaskReqDTO;
+import com.tracker.server.dto.task.res.SmallTaskResDTO;
 import com.tracker.server.entity.task.SmallTask;
 import com.tracker.server.repository.task.SmallTaskRepository;
 
@@ -14,48 +16,41 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class SmallTaskService {
 
-    private final SmallTaskRepository bigTaskRepository;
+    private final SmallTaskRepository smallTaskRepository;
 
-    // // 작은 할일 생성
-    // public SmallTask create(SmallTask bigTask) {
-    //     return bigTaskRepository.save(bigTask);
-    // }
 
-    // // 작은 할일 조회(Small Task Id)
-    // public Optional<SmallTask> get(Long id) {
-    //     return bigTaskRepository.findById(id);
-    // }
+    // 작은 할일 수정
+    @Transactional
+    public SmallTaskResDTO updateSmallTask(Long id, SmallTaskReqDTO updateData) {
+        SmallTask task = smallTaskRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("작은 할 일이 존재하지 않습니다"));
+    
+        task.setContent(updateData.getContent());
+        task.setDivSug(updateData.getDivSug());
+    
+        return new SmallTaskResDTO(smallTaskRepository.save(task));
+    }
 
-    // // 작은 할일 조회(User Id)
-    // public List<SmallTask> getByUserId(String userId) {
-    //     return bigTaskRepository.findByUser_UserId(userId);
-    // }
 
-    // // 작은 할일 수정
-    // public SmallTask updateBigTask(Long id, SmallTask updateData) {
-    //     SmallTask task = bigTaskRepository.findById(id)
-    //         .orElseThrow(() -> new IllegalArgumentException("할 일이 존재하지 않습니다"));
+    // 큰 할일 삭제(Small Task Id)
+    public void deleteSmallTask(Long id) {
+        SmallTask task = smallTaskRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("작은 할 일이 존재하지 않습니다"));
 
-    //     task.setBigTaskTitle(updateData.getBigTaskTitle());
-    //     task.setIsDone(updateData.getIsDone());
-    //     task.setReminderAt(updateData.getReminderAt());
-    //     task.setDoneDt(updateData.getDoneDt());
+        smallTaskRepository.delete(task);
+    }
 
-    //     return bigTaskRepository.save(task);
-    // }
+    // 큰 할 일 삭제(User Id)
+    @Transactional
+    public void deleteByUserId(String userId) {
+        List<SmallTask> tasks = smallTaskRepository.findByBigTask_User_UserId(userId);
+        smallTaskRepository.deleteAll(tasks);
+    }
 
-    // // 작은 할일 삭제(Big Task Id)
-    // public void deleteBigTask(Long id) {
-    //     SmallTask task = bigTaskRepository.findById(id)
-    //         .orElseThrow(() -> new IllegalArgumentException("할 일이 존재하지 않습니다"));
-
-    //     bigTaskRepository.delete(task);
-    // }
-
-    // // 작은 할일 삭제(User Id)
-    // @Transactional
-    // public void deleteByUserId(String userId) { 
-    //     List<SmallTask> tasks = bigTaskRepository.findByUser_UserId(userId);
-    //     bigTaskRepository.deleteAll(tasks);
-    // }
+    // 큰 할 일 삭제(Big Task Id)
+    @Transactional
+    public void deleteByBigTaskId(Long id) {
+        List<SmallTask> tasks = smallTaskRepository.findByBigTask_BigTaskId(id);
+        smallTaskRepository.deleteAll(tasks);
+    }
 }
