@@ -5,6 +5,7 @@ import com.tracker.server.dto.task.res.SmallTaskResDTO;
 import com.tracker.server.entity.task.SmallTask;
 import com.tracker.server.repository.task.SmallTaskRepository;
 
+import com.tracker.server.utils.CustomException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,7 @@ public class SmallTaskService {
     @Transactional
     public SmallTaskResDTO updateSmallTask(Long id, SmallTaskReqDTO updateData) {
         SmallTask task = smallTaskRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("작은 할 일이 존재하지 않습니다"));
+            .orElseThrow(() -> new CustomException("작은 할 일이 존재하지 않습니다"));
     
         task.setContent(updateData.getContent());
         task.setDivSug(updateData.getDivSug());

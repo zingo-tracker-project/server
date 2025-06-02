@@ -1,4 +1,5 @@
 package com.tracker.server.dto.user.req;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tracker.server.utils.enums.Gender;
 import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
@@ -13,10 +14,9 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 public class UserLoginReqDTO {
-    @NotBlank(message = "id는 필수값입니다.")
     private String userId;
-    @NotBlank(message = "이름은 필수값입니다.")
     private String userNm;
     private Gender gender;
     private String age_grp;
+    private String profileImage;
 }

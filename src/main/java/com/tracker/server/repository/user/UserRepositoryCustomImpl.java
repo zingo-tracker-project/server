@@ -1,7 +1,9 @@
 package com.tracker.server.repository.user;
 
 
+import com.querydsl.core.types.EntityPath;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.tracker.server.dto.user.req.UserUpdateReqDTO;
 import com.tracker.server.entity.user.QUser;
 import com.tracker.server.entity.user.User;
 import jakarta.persistence.EntityManager;
@@ -9,15 +11,21 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
+
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 @Repository
 @RequiredArgsConstructor
+@Slf4j
 public class UserRepositoryCustomImpl implements UserRepositoryCustom {
 
     private final JPAQueryFactory queryFactory; // query-dsl
     private final EntityManager entityManager; // jpa
-    QUser user = QUser.user; // query dsl
+    QUser qUser = QUser.user; // query dsl
 
     @Override
     @Transactional
@@ -27,17 +35,40 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
     }
 
     @Override
-    public User findUserById(String userId) {
-        return queryFactory
-                .selectFrom(user)
-                .where(user.userId.eq(userId))
-                .fetchOne();
+    @Transactional
+    public Optional<User> updateUserCustom(UserUpdateReqDTO updateData) {
+
+        log.info("findUser :" + updateData.getUserId());
+        log.info(updateData.getAgeGrp());
+
+        queryFactory.update(qUser)
+                .set(qUser.profileImage, updateData.getProfileImage())
+                .set(qUser.userNm, updateData.getUserNm())
+                .set(qUser.gender, updateData.getGender())
+                .set(qUser.ageGrp, updateData.getAgeGrp())
+                .where(qUser.userId.eq(updateData.getUserId()))
+                .execute();
+
+        entityManager.clear();
+        return findUserById(updateData.getUserId());
+    }
+
+
+    @Override
+    public Optional<User> findUserById(String userId) {
+        return Optional.ofNullable(queryFactory
+                .selectFrom(qUser)
+                .where(qUser.userId.eq(userId))
+                .fetchOne());
     }
     @Override
+    @Transactional
     public void deleteUserById(String userId) {
-        queryFactory.delete(user)
-                .where(user.userId.eq(userId))
+        queryFactory.delete(qUser)
+                .where(qUser.userId.eq(userId))
                 .execute();
     }
+
+
 
 }

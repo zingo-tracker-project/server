@@ -2,6 +2,8 @@ package com.tracker.server.service.user;
 
 
 import com.tracker.server.dto.user.req.UserLoginReqDTO;
+import com.tracker.server.dto.user.req.UserUpdateReqDTO;
+import com.tracker.server.dto.user.res.UserInfoResDTO;
 import com.tracker.server.dto.user.res.UserLoginResDTO;
 import com.tracker.server.entity.user.User;
 import com.tracker.server.repository.user.UserRepository;
@@ -9,6 +11,8 @@ import com.tracker.server.utils.*;
 import com.tracker.server.utils.enums.Gender;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -31,12 +35,13 @@ public class UserService {
         String age_grp = "";
 
         // 있는 회원이면 로그인
-        User findUser = userRepository.findUserById(encryptedId);
-        if (findUser != null) {
+        Optional<User> findUser = userRepository.findUserById(encryptedId);
+
+        if (findUser.isPresent()) {
             userId = encryptedId;
-            userNm = findUser.getUserNm();
-            gender = findUser.getGender();
-            age_grp = findUser.getAgeGrp();
+            userNm = findUser.get().getUserNm();
+            gender = findUser.get().getGender();
+            age_grp = findUser.get().getAgeGrp();
         }
         else {
             // 없는 회원이면 회원가입
@@ -68,16 +73,22 @@ public class UserService {
         return userLoginResDTO;
     }
 
+    public UserInfoResDTO updateUser(UserUpdateReqDTO updateData) {
+        User findUser = findUserById(updateData.getUserId());
+
+        log.info("findUser : : " + findUser);
+
+        // 업데이트
+        findUser = userRepository.updateUserCustom(updateData)
+                .orElseThrow(() -> new CustomException("존재하지 않는 유저입니다."));
+
+        return UserInfoResDTO.fromEntity(findUser);
+    }
+
     public User findUserById(String id) {
-        User user = userRepository.findUserById(id);
-        // TODO Custom Exception 구현 필요
-        if (user == null) {
-            throw new IllegalArgumentException("사용자를 찾을 수 없습니다. ID: " + id);
-        }
+        User user = userRepository.findUserById(id)
+                .orElseThrow(() -> new CustomException("존재하지 않는 유저입니다."));
         return user;
     }
 
-    public void deleteUserById(String id) {
-        userRepository.deleteUserById(id);
-    }
 }

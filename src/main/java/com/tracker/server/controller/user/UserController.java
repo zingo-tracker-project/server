@@ -1,6 +1,8 @@
 package com.tracker.server.controller.user;
 
 import com.tracker.server.dto.user.req.UserLoginReqDTO;
+import com.tracker.server.dto.user.req.UserUpdateReqDTO;
+import com.tracker.server.dto.user.res.UserInfoResDTO;
 import com.tracker.server.dto.user.res.UserLoginResDTO;
 import com.tracker.server.service.user.UserService;
 import com.tracker.server.utils.ApiResponseEntity;
@@ -23,6 +25,11 @@ public class UserController {
         this.userService = userService;
     }
 
+    /**
+     * 회원가입 및 로그인
+     * @param userLoginReqDto
+     * @return
+     */
     @PostMapping("/login")
     @Operation(summary = "로그인", description = "로그인 API")
     public ApiResponseEntity<UserLoginResDTO> loginUser(@RequestBody @Valid UserLoginReqDTO userLoginReqDto) {
@@ -30,10 +37,33 @@ public class UserController {
         return ApiResponseEntity.ok(CommonConstants.GLOBAL_SUCCESS_MSG,savedUser);
     }
 
+    /**
+     * jwt 테스트
+     * @param authentication
+     * @return
+     */
     @GetMapping("/me")
     public ResponseEntity<String> getMyInfo(Authentication authentication) {
         String userId = (String) authentication.getPrincipal();
         return ResponseEntity.ok("id :  " + userId);
     }
+
+    /**
+     * 유저 정보 수정
+     *
+     * @param authentication
+     * @param updateData
+     * @return
+     */
+    @PatchMapping()
+    public ApiResponseEntity<UserInfoResDTO> updateUser(Authentication authentication,
+                                                        @RequestBody UserUpdateReqDTO updateData) {
+        String userId = (String) authentication.getPrincipal();
+        updateData.setUserId(userId);
+
+        UserInfoResDTO resDTO = userService.updateUser(updateData);
+        return ApiResponseEntity.ok(CommonConstants.GLOBAL_SUCCESS_MSG, resDTO);
+    }
+
 
 }

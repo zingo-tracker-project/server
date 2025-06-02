@@ -29,6 +29,8 @@ public class QUser extends EntityPathBase<User> {
 
     public final BooleanPath isActive = createBoolean("isActive");
 
+    public final StringPath profileImage = createString("profileImage");
+
     public final StringPath userId = createString("userId");
 
     public final StringPath userNm = createString("userNm");
