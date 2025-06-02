@@ -8,6 +8,7 @@ import com.tracker.server.entity.user.User;
 import com.tracker.server.repository.task.BigTaskRepository;
 import com.tracker.server.repository.task.SmallTaskRepository;
 import com.tracker.server.repository.user.UserRepository;
+import com.tracker.server.utils.CustomException;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +33,7 @@ public class BigTaskService {
 
     public BigTaskResDTO create(BigTaskReqDTO bigTaskReq) {
         User user = userRepository.findById(bigTaskReq.getUserId())
-            .orElseThrow(() -> new IllegalArgumentException("유저 없음"));
+            .orElseThrow(() -> new CustomException("유저 없음"));
         
         BigTask saved = bigTaskRepository.save(bigTaskReq.toEntity(user));
         return new BigTaskResDTO(saved);
@@ -60,19 +61,19 @@ public class BigTaskService {
     // 단일 큰 할 일 + 작은 할 일들 조회
     public BigTaskResDTO get(Long id) {
         BigTask tasks = bigTaskRepository.findWithSmallTasksByBigTaskId(id)
-            .orElseThrow(() -> new IllegalArgumentException("해당하는 할 일이 없습니다."));
+            .orElseThrow(() -> new CustomException("해당하는 할 일이 없습니다."));
         return new BigTaskResDTO(tasks);
     }
 
     public BigTask getBigTask(Long id) {
         return bigTaskRepository.findWithSmallTasksByBigTaskId(id)
-            .orElseThrow(() -> new IllegalArgumentException("해당하는 할 일이 없습니다."));
+            .orElseThrow(() -> new CustomException("해당하는 할 일이 없습니다."));
     }
 
     // 큰 할 일 수정
     public BigTaskResDTO updateBigTask(Long id, BigTaskReqDTO updateData) {
         BigTask task = bigTaskRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("할 일이 존재하지 않습니다"));
+            .orElseThrow(() -> new CustomException("할 일이 존재하지 않습니다"));
 
         task.setBigTaskTitle(updateData.getBigTaskTitle());
         task.setIsDone(updateData.getIsDone());
@@ -87,7 +88,7 @@ public class BigTaskService {
     // 큰 할일 삭제(Big Task Id)
     public void deleteBigTask(Long id) {
         BigTask task = bigTaskRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("할 일이 존재하지 않습니다"));
+            .orElseThrow(() -> new CustomException("할 일이 존재하지 않습니다"));
 
         bigTaskRepository.delete(task);
     }
