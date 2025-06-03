@@ -7,6 +7,7 @@ import com.tracker.server.dto.user.res.UserLoginResDTO;
 import com.tracker.server.service.user.UserService;
 import com.tracker.server.utils.ApiResponseEntity;
 import com.tracker.server.utils.CommonConstants;
+import com.tracker.server.utils.JwtResDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -63,6 +64,12 @@ public class UserController {
 
         UserInfoResDTO resDTO = userService.updateUser(updateData);
         return ApiResponseEntity.ok(CommonConstants.GLOBAL_SUCCESS_MSG, resDTO);
+    }
+
+    @PostMapping("/refresh")
+    public ApiResponseEntity<JwtResDTO> refreshToken(Authentication authentication){
+        return ApiResponseEntity.ok(CommonConstants.GLOBAL_SUCCESS_MSG,
+                userService.refreshToken((String) authentication.getPrincipal()));
     }
 
 

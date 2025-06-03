@@ -38,9 +38,6 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
     @Transactional
     public Optional<User> updateUserCustom(UserUpdateReqDTO updateData) {
 
-        log.info("findUser :" + updateData.getUserId());
-        log.info(updateData.getAgeGrp());
-
         queryFactory.update(qUser)
                 .set(qUser.profileImage, updateData.getProfileImage())
                 .set(qUser.userNm, updateData.getUserNm())

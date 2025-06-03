@@ -25,6 +25,11 @@ public class UserService {
         this.jwtUtil = jwtUtil;
     }
 
+    /**
+     * 로그인 및 회원가입
+     * @param userLoginReqDto
+     * @return
+     */
     public UserLoginResDTO loginUser(UserLoginReqDTO userLoginReqDto) {
 
         String encryptedId = HashIdsUtil.encode(userLoginReqDto.getUserId());
@@ -73,22 +78,39 @@ public class UserService {
         return userLoginResDTO;
     }
 
+    /**
+     * 회원 업데이트
+     * @param updateData
+     * @return
+     */
     public UserInfoResDTO updateUser(UserUpdateReqDTO updateData) {
         User findUser = findUserById(updateData.getUserId());
 
-        log.info("findUser : : " + findUser);
-
         // 업데이트
-        findUser = userRepository.updateUserCustom(updateData)
-                .orElseThrow(() -> new CustomException("존재하지 않는 유저입니다."));
+        findUser = userRepository.updateUserCustom(updateData).orElse(null);
 
         return UserInfoResDTO.fromEntity(findUser);
     }
 
-    public User findUserById(String id) {
-        User user = userRepository.findUserById(id)
+    /**
+     * 회원 찾기
+     * @param userId
+     * @return
+     */
+    public User findUserById(String userId) {
+        User user = userRepository.findUserById(userId)
                 .orElseThrow(() -> new CustomException("존재하지 않는 유저입니다."));
         return user;
+    }
+
+    /**
+     * refresh 토큰 발행
+     * @param userId
+     * @return
+     */
+    public JwtResDTO refreshToken(String userId) {
+        JwtResDTO jwt = jwtUtil.generateJwtToken(userId);
+        return jwt;
     }
 
 }
