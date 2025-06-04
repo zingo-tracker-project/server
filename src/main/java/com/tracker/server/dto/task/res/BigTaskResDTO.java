@@ -15,6 +15,18 @@ import java.util.stream.Collectors;
 @Builder
 @AllArgsConstructor
 public class BigTaskResDTO {
+
+    private Long bigTaskId;
+    private String bigTaskTitle;
+    private Boolean isDone;
+    private LocalDateTime reminderAt;
+    private LocalDateTime doneDt;
+    private LocalDateTime createdDt;
+    private LocalDateTime startDt;
+    private LocalDateTime endDt;
+    private Boolean isRepeat;
+    private List<SmallTaskResDTO> smallTasks;
+    
     public BigTaskResDTO(BigTask bigTask) {
         this.bigTaskId = bigTask.getBigTaskId();
         this.bigTaskTitle = bigTask.getBigTaskTitle();
@@ -22,6 +34,8 @@ public class BigTaskResDTO {
         this.reminderAt = bigTask.getReminderAt();
         this.doneDt = bigTask.getDoneDt();
         this.createdDt = bigTask.getCreatedDt();
+        this.startDt = bigTask.getStartDt();
+        this.endDt = bigTask.getEndDt();
         this.isRepeat = bigTask.getIsRepeat();
         this.smallTasks = bigTask.getSmallTaskList().stream()
             .map(SmallTaskResDTO::new)
@@ -35,17 +49,12 @@ public class BigTaskResDTO {
             .isDone(this.isDone)
             .reminderAt(this.reminderAt)
             .doneDt(this.doneDt)
+            .startDt(this.startDt)
+            .endDt(this.endDt)
             .createdDt(this.createdDt)
             .isRepeat(this.isRepeat)
             .build();
     }
 
-    private Long bigTaskId;
-    private String bigTaskTitle;
-    private Boolean isDone;
-    private LocalDateTime reminderAt;
-    private LocalDateTime doneDt;
-    private LocalDateTime createdDt;
-    private Boolean isRepeat;
-    private List<SmallTaskResDTO> smallTasks;
+
 }

@@ -13,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/task/small-task")
+@RequestMapping("/api/task/small")
 @RequiredArgsConstructor
 public class SmallTaskController {
 
@@ -39,7 +39,7 @@ public class SmallTaskController {
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/big-task/{id}")
+    @DeleteMapping("/big/{id}")
     public ResponseEntity<Void> deleteByBigTaskId(@PathVariable Long id) {
         smallTaskService.deleteByBigTaskId(id);
         return ResponseEntity.noContent().build();

@@ -19,6 +19,8 @@ public class BigTaskReqDTO {
     private Boolean isDone;
     private LocalDateTime reminderAt;
     private LocalDateTime doneDt;
+    private LocalDateTime startDt;
+    private LocalDateTime endDt;
     private Boolean isRepeat;
     private String userId;
 
@@ -27,6 +29,8 @@ public class BigTaskReqDTO {
             .bigTaskTitle(this.bigTaskTitle)
             .isDone(this.isDone)
             .reminderAt(this.reminderAt)
+            .startDt(this.startDt)
+            .endDt(this.endDt)
             .isRepeat(this.isRepeat)
             .user(user)
             .build();

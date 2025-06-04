@@ -30,6 +30,8 @@ public class QBigTask extends EntityPathBase<BigTask> {
 
     public final DateTimePath<java.time.LocalDateTime> doneDt = createDateTime("doneDt", java.time.LocalDateTime.class);
 
+    public final DateTimePath<java.time.LocalDateTime> endDt = createDateTime("endDt", java.time.LocalDateTime.class);
+
     public final BooleanPath isDone = createBoolean("isDone");
 
     public final BooleanPath isRepeat = createBoolean("isRepeat");
@@ -37,6 +39,8 @@ public class QBigTask extends EntityPathBase<BigTask> {
     public final DateTimePath<java.time.LocalDateTime> reminderAt = createDateTime("reminderAt", java.time.LocalDateTime.class);
 
     public final ListPath<SmallTask, QSmallTask> smallTaskList = this.<SmallTask, QSmallTask>createList("smallTaskList", SmallTask.class, QSmallTask.class, PathInits.DIRECT2);
+
+    public final DateTimePath<java.time.LocalDateTime> startDt = createDateTime("startDt", java.time.LocalDateTime.class);
 
     public final com.tracker.server.entity.user.QUser user;
 

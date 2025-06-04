@@ -32,9 +32,13 @@ public class QSmallTask extends EntityPathBase<SmallTask> {
 
     public final DateTimePath<java.time.LocalDateTime> doneDt = createDateTime("doneDt", java.time.LocalDateTime.class);
 
+    public final DateTimePath<java.time.LocalDateTime> endDt = createDateTime("endDt", java.time.LocalDateTime.class);
+
     public final BooleanPath isDone = createBoolean("isDone");
 
     public final NumberPath<Long> smallTaskId = createNumber("smallTaskId", Long.class);
+
+    public final DateTimePath<java.time.LocalDateTime> startDt = createDateTime("startDt", java.time.LocalDateTime.class);
 
     public QSmallTask(String variable) {
         this(SmallTask.class, forVariable(variable), INITS);

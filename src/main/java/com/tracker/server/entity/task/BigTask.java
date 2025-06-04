@@ -52,6 +52,12 @@ public class BigTask {
     @Column(name = "reminder_at")
     private LocalDateTime reminderAt;
 
+    @Column(name = "start_dt")
+    private LocalDateTime startDt;
+
+    @Column(name = "end_dt")
+    private LocalDateTime endDt;
+
     @Column(name = "is_repeat")
     private Boolean isRepeat;
 

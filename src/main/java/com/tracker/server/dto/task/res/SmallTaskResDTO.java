@@ -19,6 +19,8 @@ public class SmallTaskResDTO {
     private Boolean divSug;
     private LocalDateTime createdDt;
     private LocalDateTime doneDt;
+    private LocalDateTime startDt;
+    private LocalDateTime endDt;
 
     public SmallTaskResDTO(SmallTask smallTask) {
         this.smallTaskId = smallTask.getSmallTaskId();
@@ -27,5 +29,7 @@ public class SmallTaskResDTO {
         this.divSug = smallTask.getDivSug();
         this.createdDt = smallTask.getCreatedDt();
         this.doneDt = smallTask.getDoneDt();
+        this.startDt = smallTask.getStartDt();
+        this.endDt = smallTask.getEndDt();
     }
 }

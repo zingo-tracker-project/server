@@ -23,7 +23,7 @@ public class BigTaskController {
     private final BigTaskService bigTaskService;
 
     // 큰 할 일 생성
-    @PostMapping("/big-task")
+    @PostMapping("/big")
     public ResponseEntity<BigTaskResDTO> create(@RequestBody BigTaskReqDTO bigTask) {
         BigTaskResDTO created = bigTaskService.create(bigTask);
         return ResponseEntity.ok(created);
@@ -37,7 +37,7 @@ public class BigTaskController {
     // }
 
     // 큰 할 일들 조회(User Id)
-    @GetMapping("/big-task/user/{userId}")
+    @GetMapping("/big/user/{userId}")
     public ResponseEntity<List<BigTaskResDTO>> getByUserId(@PathVariable String userId) {
         List<BigTaskResDTO> bigTasks = bigTaskService.getByUserId(userId);
         return ResponseEntity.ok(bigTasks);
@@ -51,14 +51,14 @@ public class BigTaskController {
     } 
 
     // 단일 큰 할 일 + 작은 할 일들 조회
-    @GetMapping("/big-task/{id}")
+    @GetMapping("/big/{id}")
     public ResponseEntity<BigTaskResDTO> get(@PathVariable Long id) {
         BigTaskResDTO tasks = bigTaskService.get(id);
         return ResponseEntity.ok(tasks);
     } 
 
     // 큰 할 일 수정
-    @PutMapping("/big-task/{id}")
+    @PutMapping("/big/{id}")
     public ResponseEntity<BigTaskResDTO> update(
             @PathVariable Long id,
             @RequestBody BigTaskReqDTO updateData
@@ -68,21 +68,21 @@ public class BigTaskController {
     }
 
     // 큰 할 일 삭제(Big Task Id)
-    @DeleteMapping("/big-task/{id}")
+    @DeleteMapping("/big/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         bigTaskService.deleteBigTask(id);
         return ResponseEntity.noContent().build();
     }
 
     // 큰 할 일 삭제(User Id)
-    @DeleteMapping("/big-task/user/{userId}")
+    @DeleteMapping("/big/user/{userId}")
     public ResponseEntity<Void> deleteByUserId(@PathVariable String userId) {
         bigTaskService.deleteByUserId(userId);
         return ResponseEntity.noContent().build();
     }
 
     // 작은 할 일 생성(Big Task Id)
-    @PostMapping("/big-task/{id}/small-task")
+    @PostMapping("/big/{id}/small")
     public ResponseEntity<SmallTask> createSmallTask(@PathVariable Long id, @RequestBody SmallTask smallTask) {
         BigTaskResDTO bigTask = bigTaskService.get(id);
         smallTask.setBigTask(bigTask.toEntity());
@@ -91,7 +91,7 @@ public class BigTaskController {
     }
 
     // 작은 할 일들 조회(Big Task Id)
-    @GetMapping("/big-task/{id}/small-tasks")
+    @GetMapping("/big/{id}/small")
     public ResponseEntity<List<SmallTask>> getSmallTasks(@PathVariable Long id) {
         List<SmallTask> smallTask = bigTaskService.getSmallTasks(id);
         return ResponseEntity.ok(smallTask);

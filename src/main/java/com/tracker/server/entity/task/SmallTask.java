@@ -49,6 +49,12 @@ public class SmallTask {
     @Column(name = "done_dt")
     private LocalDateTime doneDt;
 
+    @Column(name = "start_dt")
+    private LocalDateTime startDt;
+
+    @Column(name = "end_dt")
+    private LocalDateTime endDt;
+
     @Column(name = "div_sug", nullable = false)
     private Boolean divSug = false;
     
