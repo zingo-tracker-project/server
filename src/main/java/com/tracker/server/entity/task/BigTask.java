@@ -6,8 +6,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.hibernate.annotations.CreationTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.tracker.server.entity.user.User;
 
 @Entity
 @Table(name = "TB_BIG_TASK")
@@ -22,12 +28,45 @@ public class BigTask {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long bigTaskId;
 
-    @Builder.Default
-    @OneToMany(mappedBy = "bigTask", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<SmallTask> smallTaskList = new ArrayList<>();;
+    @ManyToOne
+    @JoinColumn(
+            name = "user_id",
+            nullable = false,
+            foreignKey = @ForeignKey(name = "fk_big_task_user")
+    )
+    private User user;
 
     @Column(name="big_task_title", nullable = false, length = 50)
     private String bigTaskTitle;
+
+    @Column(name = "created_dt")
+    @CreationTimestamp
+    private LocalDateTime createdDt;
+
+    @Column(name = "is_done" )
+    private Boolean isDone = false;
+
+    @Column(name = "done_dt")
+    private LocalDateTime doneDt;
+
+    @Column(name = "reminder_at")
+    private LocalDateTime reminderAt;
+
+    @Column(name = "start_dt")
+    private LocalDateTime startDt;
+
+    @Column(name = "end_dt")
+    private LocalDateTime endDt;
+
+    @Column(name = "is_repeat")
+    private Boolean isRepeat;
+
+    @Builder.Default
+    @OneToMany(mappedBy = "bigTask", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<SmallTask> smallTaskList = new ArrayList<>();
+
+    
 
 
 
