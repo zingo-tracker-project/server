@@ -39,4 +39,7 @@ public class User {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
+    @Column(name = "profile_img")
+    private String profileImage;
+
 }

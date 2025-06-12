@@ -52,10 +52,10 @@ public class JwtUtil {
             Date expiration = claims.getExpiration();
             return expiration.after(new Date());
         } catch (ExpiredJwtException e) {
-            log.debug("토큰 만료됨");
+            log.info("### tokenfilter : 토큰 만료됨 ###");
             return false;
         } catch (JwtException | IllegalArgumentException e) {
-            log.debug("토큰 유효성 오류: " + e.getMessage());
+            log.info("### tokenfilter : 토큰 유효성 오류: " + e.getMessage() + "###");
             return false;
         }
     }
