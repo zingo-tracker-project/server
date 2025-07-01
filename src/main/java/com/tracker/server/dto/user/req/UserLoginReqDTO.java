@@ -14,9 +14,10 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 public class UserLoginReqDTO {
+    @NotBlank
     private String userId;
     private String userNm;
-    private Gender gender;
+    private Gender gender = Gender.O;
     private String age_grp;
     private String profileImage;
 }

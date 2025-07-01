@@ -1,7 +1,6 @@
 package com.tracker.server.config;
 
 
-import com.tracker.server.utils.CustomException;
 import com.tracker.server.utils.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

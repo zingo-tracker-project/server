@@ -11,6 +11,7 @@ import lombok.Setter;
 public class UserUpdateReqDTO {
 
     private String userId;
+
     private Gender gender;
 
     private String userNm;
@@ -18,4 +19,5 @@ public class UserUpdateReqDTO {
     private String ageGrp;
 
     private String profileImage;
+
 }
