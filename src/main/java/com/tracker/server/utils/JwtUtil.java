@@ -46,17 +46,21 @@ public class JwtUtil {
         return claims.get("userId", String.class);
     }
 
-    public boolean validateToken(String token) {
+    public int validateToken(String token) {
+        int result = 1;
         try {
             Claims claims = parseClaims(token);
             Date expiration = claims.getExpiration();
-            return expiration.after(new Date());
+            if (expiration.after(new Date())) {
+                result = 1;
+            }
+            return result;
         } catch (ExpiredJwtException e) {
             log.info("### tokenfilter : 토큰 만료됨 ###");
-            return false;
+            return 2;
         } catch (JwtException | IllegalArgumentException e) {
             log.info("### tokenfilter : 토큰 유효성 오류: " + e.getMessage() + "###");
-            return false;
+            return 3;
         }
     }
 
