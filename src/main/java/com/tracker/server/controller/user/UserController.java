@@ -56,7 +56,7 @@ public class UserController {
      * @param updateData
      * @return
      */
-    @PatchMapping()
+    @PatchMapping("/update")
     public ApiResponseEntity<UserInfoResDTO> updateUser(Authentication authentication,
                                                         @RequestBody UserUpdateReqDTO updateData) {
         String userId = (String) authentication.getPrincipal();

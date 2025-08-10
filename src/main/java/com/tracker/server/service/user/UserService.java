@@ -8,6 +8,7 @@ import com.tracker.server.dto.user.res.UserLoginResDTO;
 import com.tracker.server.entity.user.User;
 import com.tracker.server.repository.user.UserRepository;
 import com.tracker.server.utils.*;
+import org.springframework.beans.BeanUtils;
 import com.tracker.server.utils.enums.Gender;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,52 +27,45 @@ public class UserService {
     }
 
     /**
-     * 로그인 및 회원가입
+     * 카카오 로그인
      * @param userLoginReqDto
      * @return
      */
     public UserLoginResDTO loginUser(UserLoginReqDTO userLoginReqDto) {
 
-        String encryptedId = HashIdsUtil.encode(userLoginReqDto.getUserId());
+        // 최초 카카오로그인에서 인코딩 되는 값으로 보내니, 있는 회원이라도 인코당 걸려서 나옴 서버로직 수정필요
+        String encryptedId = "";
+        boolean isNewUser = false;
+        User user;
 
-        String userId = "";
-        String userNm = "";
-        Gender gender;
-        String age_grp = "";
+        Optional OptEncryptedId = HashIdsUtil.encode(userLoginReqDto.getUserId());
+        encryptedId = (String) OptEncryptedId.get();
 
-        // 있는 회원이면 로그인
         Optional<User> findUser = userRepository.findUserById(encryptedId);
-
         if (findUser.isPresent()) {
-            userId = encryptedId;
-            userNm = findUser.get().getUserNm();
-            gender = findUser.get().getGender();
-            age_grp = findUser.get().getAgeGrp();
-        }
-        else {
-            // 없는 회원이면 회원가입
+            user = findUser.get();
+        }else {
+            // 없으면 회원가입
             User newUser = User.builder()
                     .userId(encryptedId)
                     .gender(userLoginReqDto.getGender())
                     .userNm(userLoginReqDto.getUserNm())
-                    .ageGrp(userLoginReqDto.getAge_grp())
+                    .profileImage(userLoginReqDto.getProfileImage())
                     .build();
 
-            User createdUser = userRepository.createUserCustom(newUser);
-
-            userId = createdUser.getUserId();
-            userNm = createdUser.getUserNm();
-            gender = createdUser.getGender();
-            age_grp = createdUser.getAgeGrp();
+            user = userRepository.createUserCustom(newUser);
+            isNewUser = true;
         }
 
-        JwtResDTO jwt = jwtUtil.generateJwtToken(userId);
+        JwtResDTO jwt = jwtUtil.generateJwtToken(encryptedId);
 
         UserLoginResDTO userLoginResDTO = UserLoginResDTO.builder()
-                .userId(userId)
-                .userNm(userNm)
-                .age_grp(age_grp)
-                .gender(gender)
+                .userId(user.getUserId())
+                .userNm(user.getUserNm())
+                .gender(user.getGender())
+                .ageGrp(user.getAgeGrp())
+                .profileImage(user.getProfileImage())
+                .isNewUser(isNewUser)
                 .jwt(jwt).
                 build();
 
@@ -84,10 +78,12 @@ public class UserService {
      * @return
      */
     public UserInfoResDTO updateUser(UserUpdateReqDTO updateData) {
-        User findUser = findUserById(updateData.getUserId());
 
         // 업데이트
-        findUser = userRepository.updateUserCustom(updateData).orElse(null);
+        User findUser = userRepository.updateUserCustom(updateData).orElseThrow(()-> {
+            new CustomException("없는 회원입니다.");
+            return null;
+        });
 
         return UserInfoResDTO.fromEntity(findUser);
     }

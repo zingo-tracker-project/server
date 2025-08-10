@@ -16,6 +16,8 @@ public class UserLoginResDTO {
     private String userId;
     private String userNm;
     private Gender gender;
-    private String age_grp;
+    private String ageGrp;
     private JwtResDTO jwt;
+    private String profileImage;
+    boolean isNewUser = false;
 }
